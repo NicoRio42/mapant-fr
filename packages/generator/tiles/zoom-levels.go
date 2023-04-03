@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -175,8 +176,29 @@ func CreateUpperZoomLevel(zoomLevel int) {
 
 	for xTile, yTilesMap := range tilesToGenerate {
 		for yTile, _ := range yTilesMap {
-			xTopLeft := 2*(xTile-1) + 1
-			yTopLeft := 2*(yTile-1) + 1
+			xChildTopLeft := 2*(xTile-1) + 1
+			yChildTopLeft := 2*(yTile-1) + 1
+
+			childTopLeftPath := path.Join("out", fmt.Sprint(zoomLevel+1), fmt.Sprint(xChildTopLeft), fmt.Sprint(yChildTopLeft)+".png")
+			childTopLeftTile := getTileIfExistsOrTransparentImage(childTopLeftPath)
+
+			childTopRightPath := path.Join("out", fmt.Sprint(zoomLevel+1), fmt.Sprint(xChildTopLeft+1), fmt.Sprint(yChildTopLeft)+".png")
+			childTopRightTile := getTileIfExistsOrTransparentImage(childTopRightPath)
+
+			childBottomLeftPath := path.Join("out", fmt.Sprint(zoomLevel+1), fmt.Sprint(xChildTopLeft), fmt.Sprint(yChildTopLeft+1)+".png")
+			childBottomLeftTile := getTileIfExistsOrTransparentImage(childBottomLeftPath)
+
+			childBottomRightPath := path.Join("out", fmt.Sprint(zoomLevel+1), fmt.Sprint(xChildTopLeft), fmt.Sprint(yChildTopLeft)+".png")
+			childBottomRightTile := getTileIfExistsOrTransparentImage(childBottomRightPath)
+
+			top, _ := mergi.Merge("TT", []image.Image{childTopLeftTile, childTopRightTile})
+			bottom, _ := mergi.Merge("TT", []image.Image{childBottomLeftTile, childBottomRightTile})
+
+			tile, _ := mergi.Merge("TB", []image.Image{top, bottom})
+			path := filepath.Join("out", fmt.Sprint(zoomLevel), fmt.Sprint(xTile), fmt.Sprint(yTile)+".png")
+
+			createPathIfDoesntExist("out", fmt.Sprint(zoomLevel), fmt.Sprint(xTile))
+			mergi.Export(impexp.NewFileExporter(tile, path))
 		}
 	}
 }

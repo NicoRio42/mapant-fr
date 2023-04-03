@@ -2,10 +2,15 @@ package tiles
 
 import (
 	"errors"
+	"fmt"
+	"image"
 	"log"
 	"math"
 	"os"
 	"path/filepath"
+
+	"github.com/noelyahan/impexp"
+	"github.com/noelyahan/mergi"
 )
 
 var MIN_X float64 = 343646
@@ -53,4 +58,28 @@ func findParentTile(xChild, yChild int) (int, int) {
 	}
 
 	return xParent, yParent
+}
+
+func doesFileExist(fileName string) bool {
+	_, error := os.Stat(fileName)
+	return !os.IsNotExist(error)
+}
+
+func getTileIfExistsOrTransparentImage(path string) image.Image {
+	fmt.Println(doesFileExist(path), path)
+	if doesFileExist(path) {
+		img, err := mergi.Import(impexp.NewFileImporter(path))
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		return img
+	}
+
+	upLeft := image.Point{0, 0}
+	lowRight := image.Point{int(TILE_PIXEL_SIZE), int(TILE_PIXEL_SIZE)}
+	img := image.NewRGBA(image.Rectangle{upLeft, lowRight})
+
+	return img
 }
