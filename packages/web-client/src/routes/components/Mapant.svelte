@@ -12,7 +12,7 @@
 	onMount(() => {
 		map = getMap();
 
-		const url = `${TILES_BASE_URL}{z}/{x}/{y}.png`;
+		const url = `${TILES_BASE_URL}/{z}/{x}/{y}.png`;
 
 		tileLayer = new TileLayer({
 			// extent: [343646, 1704354, 5619537, 7667537],

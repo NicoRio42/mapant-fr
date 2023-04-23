@@ -1,12 +1,8 @@
 <script lang="ts">
 	import { Map, View } from 'ol';
+	import DoubleClickZoom from 'ol/interaction/DoubleClickZoom.js';
 	import 'ol/ol.css';
 	import { onDestroy, onMount, setContext } from 'svelte';
-	import DoubleClickZoom from 'ol/interaction/DoubleClickZoom.js';
-	import proj4 from 'proj4';
-	import { get as getProjection } from 'ol/proj.js';
-	import { register } from 'ol/proj/proj4.js';
-	import { transform } from 'ol/proj';
 
 	// export let angle: number;
 	// export let fitBox: [number, number, number, number];
@@ -34,7 +30,7 @@
 		// const proj2154 = getProjection('EPSG:2154');
 		// proj2154?.setExtent([-378305.81, 6005281.2, 1320649.57, 7235612.72]);
 
-		const center = transform([45.1344, -14.2355], 'EPSG:4326', 'EPSG:3857');
+		const center = [5024338.425259926, -1601248.7770154844];
 
 		map = new Map({
 			target: 'mapviewer',
@@ -67,10 +63,5 @@
 	#mapviewer {
 		width: 100%;
 		height: 100%;
-		cursor: grab;
-	}
-
-	#mapviewer:active {
-		cursor: grabbing;
 	}
 </style>

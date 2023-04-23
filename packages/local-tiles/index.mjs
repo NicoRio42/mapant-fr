@@ -35,6 +35,7 @@ const prepareFile = async (url) => {
 
 http
   .createServer(async (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
     const file = await prepareFile(req.url);
     const statusCode = file.found ? 200 : 404;
     const mimeType = MIME_TYPES[file.ext] || MIME_TYPES.default;
