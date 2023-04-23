@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Map, View } from 'ol';
-	import DoubleClickZoom from 'ol/interaction/DoubleClickZoom.js';
 	import 'ol/ol.css';
 	import { onDestroy, onMount, setContext } from 'svelte';
 
@@ -42,8 +41,6 @@
 				// projection: 'EPSG:2154'
 			})
 		});
-
-		map.addInteraction(new DoubleClickZoom());
 
 		// view.fit(fitBox, { padding });
 	});
